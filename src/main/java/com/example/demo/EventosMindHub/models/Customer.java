@@ -1,8 +1,11 @@
 package com.example.demo.EventosMindHub.models;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -15,6 +18,12 @@ public class Customer {
     private Short edad;
     private GenereType genereType;
     private RolType rolType;
+    @OneToMany (mappedBy = "customer", fetch = FetchType.EAGER)
+    private Set<CustomerEvent> customerEvents = new HashSet<>();
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    private Set<Comment> comments = new HashSet<>();
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    private Set<Event> events = new HashSet<>();
 
     public Customer() {
     }
@@ -30,6 +39,28 @@ public class Customer {
         this.rolType = rolType;
     }
 
+    public Set<CustomerEvent> getCustomerEvents() {
+        return customerEvents;
+    }
+    public void addCustomerEvent (CustomerEvent customerEvent){
+        customerEvent.setCustomer(this);
+        customerEvents.add(customerEvent);
+    }
+    public Set<Comment> getComments() {
+        return comments;
+    }
+    public void addComments(Comment comment){
+        comment.setCustomer(this);
+        comments.add(comment);
+    }
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void addEvents (Event event){
+        event.setCustomer(this);
+        events.add(event);
+    }
     public long getCustomer_id() {
         return customer_id;
     }

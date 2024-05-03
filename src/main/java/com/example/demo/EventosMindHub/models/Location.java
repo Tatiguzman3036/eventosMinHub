@@ -1,29 +1,38 @@
 package com.example.demo.EventosMindHub.models;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.aspectj.weaver.ast.Var;
 
-import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     private long event_id;
     private Character name;
-    private Var location;
+    private Character location;
     private Integer capacity;
-    private Var img;
+    private Character img;
+    @OneToMany(mappedBy = "location", fetch = FetchType.EAGER)
+    private Set<EventLocation> eventLocations = new HashSet<>();
 
     public Location() {
     }
 
-    public Location(Character name, Var location, Integer capacity, Var img) {
+    public Location(Character name, Character location, Integer capacity, Character img) {
         this.name = name;
         this.location = location;
         this.capacity = capacity;
         this.img = img;
+    }
+    public Set<EventLocation> getEventLocations() {
+        return eventLocations;
+    }
+    public void addEventLocation(EventLocation eventLocation){
+        eventLocation.setLocation(this);
+        eventLocations.add(eventLocation);
     }
 
     public long getEvent_id() {
@@ -42,11 +51,11 @@ public class Location {
         this.name = name;
     }
 
-    public Var getLocation() {
+    public Character getLocation() {
         return location;
     }
 
-    public void setLocation(Var location) {
+    public void setLocation(Character location) {
         this.location = location;
     }
 
@@ -58,11 +67,11 @@ public class Location {
         this.capacity = capacity;
     }
 
-    public Var getImg() {
+    public Character getImg() {
         return img;
     }
 
-    public void setImg(Var img) {
+    public void setImg(Character img) {
         this.img = img;
     }
 }
